@@ -1,0 +1,47 @@
+{
+  "name": "boomi-companion",
+  "owner": {
+    "name": "Boomi Companion"
+  },
+  "description": "Claude Code plugins for building, operating, and automating on the Boomi integration platform.",
+  "metadata": {
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "bc-integration",
+      "source": "bc-integration",
+      "description": "Design, script, and troubleshoot Boomi integration processes: process design, Groovy/JavaScript Data Process scripting, EDI/profile mapping, and AtomSphere API automation.",
+      "category": "integration",
+      "keywords": ["boomi", "atomsphere", "integration", "groovy", "edi", "connectors"]
+    },
+    {
+      "name": "bc-marketplace",
+      "source": "bc-marketplace",
+      "description": "Search and evaluate prebuilt Boomi Marketplace recipes and connectors before building an integration from scratch.",
+      "category": "integration",
+      "keywords": ["boomi", "marketplace", "recipes", "connectors"]
+    },
+    {
+      "name": "bc-datahub",
+      "source": "bc-datahub",
+      "description": "Operational support for Boomi Data Hub: model design, match/merge rules, golden record governance, and sourcing/publishing integrations.",
+      "category": "data",
+      "keywords": ["boomi", "datahub", "mdm", "golden-record"]
+    },
+    {
+      "name": "bc-bdi",
+      "source": "bc-bdi",
+      "description": "Operational support for Boomi Data Integration: batch/ETL pipelines, database connectors, data lake and warehouse loads.",
+      "category": "data",
+      "keywords": ["boomi", "bdi", "etl", "data-integration"]
+    },
+    {
+      "name": "bc-agentstudio",
+      "source": "bc-agentstudio",
+      "description": "Operational support for Boomi Agentstudio: designing agents, tools, and knowledge bases, and wiring agents into Boomi processes.",
+      "category": "ai",
+      "keywords": ["boomi", "agentstudio", "agents", "ai"]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "bc-datahub",
+  "description": "Operational support for Boomi Data Hub: model design, match/merge rules, golden record governance, and sourcing/publishing integrations.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Boomi Companion"
+  },
+  "keywords": ["boomi", "datahub", "mdm", "golden-record"]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "bc-bdi",
+  "description": "Operational support for Boomi Data Integration: batch/ETL pipelines, database connectors, data lake and warehouse loads.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Boomi Companion"
+  },
+  "keywords": ["boomi", "bdi", "etl", "data-integration"]
+}

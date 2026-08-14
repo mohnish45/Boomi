@@ -1,0 +1,9 @@
+{
+  "name": "bc-marketplace",
+  "description": "Search and evaluate prebuilt Boomi Marketplace recipes and connectors before building an integration from scratch.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Boomi Companion"
+  },
+  "keywords": ["boomi", "marketplace", "recipes", "connectors"]
+}

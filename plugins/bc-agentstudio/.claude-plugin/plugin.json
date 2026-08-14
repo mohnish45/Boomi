@@ -1,0 +1,9 @@
+{
+  "name": "bc-agentstudio",
+  "description": "Operational support for Boomi Agentstudio: designing agents, tools, and knowledge bases, and wiring agents into Boomi processes.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Boomi Companion"
+  },
+  "keywords": ["boomi", "agentstudio", "agents", "ai"]
+}

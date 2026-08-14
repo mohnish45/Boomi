@@ -1,0 +1,9 @@
+{
+  "name": "bc-integration",
+  "description": "Design, script, and troubleshoot Boomi integration processes: process design, Groovy/JavaScript Data Process scripting, EDI/profile mapping, and AtomSphere API automation.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Boomi Companion"
+  },
+  "keywords": ["boomi", "atomsphere", "integration", "groovy", "edi", "connectors"]
+}
