@@ -1,0 +1,39 @@
+{
+  "id": "98765432",
+  "type": { "name": "214_CARRIER_SHIPMENT_STATUS_MESSAGE" },
+  "sender": { "isaId": "FWDRSCAC" },
+  "receiver": { "isaId": "TNCLIVING" },
+  "message": {
+    "transactionSets": [
+      {
+        "transactionSetHeader": [ { "transactionSetIdentifierCode": "214", "transactionSetControlNumber": "0001" } ],
+        "beginningSegmentForTransportationCarrierShipmentStatusMessage": [
+          { "referenceIdentification": "PRO12345", "shipmentIdentificationNumber": "SHP-55021", "standardCarrierAlphaCode": "MAEU" }
+        ],
+        "businessInstructionsAndReferenceNumber": [
+          { "referenceIdentification": "MAEU123456789", "referenceIdentificationQualifier": "BM" },
+          { "referenceIdentification": "PO104455", "referenceIdentificationQualifier": "PO" }
+        ],
+        "LX_loop": [
+          {
+            "assignedNumber": [ { "assignedNumber": "1" } ],
+            "AT7_loop": [
+              {
+                "shipmentStatusDetails": [
+                  { "shipmentStatusCode": "X3", "shipmentStatusOrAppointmentReasonCode": "NS", "date": "20261001", "time": "0900", "timeCode": "LT" }
+                ],
+                "eventLocation": [ { "cityName": "Ningbo", "countryCode": "CN" } ]
+              },
+              {
+                "shipmentStatusDetails": [
+                  { "shipmentStatusCode": "AF", "shipmentStatusOrAppointmentReasonCode": "NS", "date": "20261003", "time": "1430", "timeCode": "LT" }
+                ]
+              }
+            ],
+            "equipmentShipmentOrRealPropertyNumber": [ { "equipmentInitial": "MSCU", "equipmentNumber": "1234567" } ]
+          }
+        ]
+      }
+    ]
+  }
+}

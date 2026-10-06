@@ -28,6 +28,14 @@ Then install any of the plugins below, e.g.:
 
 Each plugin ships as Agent Skills that Claude loads automatically when the conversation matches its domain — no explicit invocation needed.
 
+## Integrations
+
+Reference integrations built with these skills live under `integrations/`:
+
+| Integration | Summary |
+| --- | --- |
+| [`orderful-214-netsuite-shipment`](integrations/orderful-214-netsuite-shipment) | Orderful X12 214 shipment status → NetSuite Inbound Shipment (container) header via REST (SuiteQL lookup + PATCH). |
+
 ## Repository layout
 
 ```
@@ -38,6 +46,8 @@ plugins/
   bc-datahub/
   bc-bdi/
   bc-agentstudio/
+integrations/
+  orderful-214-netsuite-shipment/
 ```
 
 ## Contributing
