@@ -34,7 +34,7 @@ Reference integrations built with these skills live under `integrations/`:
 
 | Integration | Summary |
 | --- | --- |
-| [`orderful-214-netsuite-shipment`](integrations/orderful-214-netsuite-shipment) | Orderful X12 214 shipment status → NetSuite Inbound Shipment (container) header via REST (SuiteQL lookup + PATCH). |
+| [`orderful-214-netsuite-shipment`](integrations/orderful-214-netsuite-shipment) | Orderful X12 214 shipment status → NetSuite Inbound Shipment headers via REST: split per container, SuiteQL lookup into a Document Cache, PATCH, completion/error emails. |
 
 ## Repository layout
 

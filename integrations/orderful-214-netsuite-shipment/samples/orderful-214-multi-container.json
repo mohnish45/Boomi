@@ -1,0 +1,170 @@
+{
+  "interchangeControlHeader": [
+    {
+      "authorizationInformationQualifier": "00",
+      "authorizationInformation": "          ",
+      "securityInformationQualifier": "00",
+      "securityInformation": "          ",
+      "interchangeIDQualifier": "ZZ",
+      "interchangeSenderID": "CARR           ",
+      "interchangeIDQualifier1": "ZZ",
+      "interchangeReceiverID": "RECEIVER       ",
+      "interchangeDate": "260910",
+      "interchangeTime": "2254",
+      "interchangeControlStandardsIdentifier": "U",
+      "interchangeControlVersionNumberCode": "00401",
+      "interchangeControlNumber": "000000023",
+      "acknowledgmentRequestedCode": "1",
+      "interchangeUsageIndicatorCode": "T",
+      "componentElementSeparator": ">"
+    }
+  ],
+  "functionalGroupHeader": [
+    {
+      "functionalIdentifierCode": "QM",
+      "applicationSendersCode": "CARR",
+      "applicationReceiversCode": "RECEIVER",
+      "date": "20260910",
+      "time": "2254",
+      "groupControlNumber": "23",
+      "responsibleAgencyCode": "X",
+      "versionReleaseIndustryIdentifierCode": "004010"
+    }
+  ],
+  "transactionSets": [
+    {
+      "transactionSetHeader": [
+        {
+          "transactionSetIdentifierCode": "214",
+          "transactionSetControlNumber": "0001"
+        }
+      ],
+      "beginningSegmentForTransportationCarrierShipmentStatusMessage": [
+        {
+          "referenceIdentification": "REF-0001",
+          "shipmentIdentificationNumber": "OCEANBL0000001",
+          "standardCarrierAlphaCode": "CARR",
+          "inquiryRequestNumber": "1"
+        }
+      ],
+      "N1_loop": [
+        {
+          "partyIdentification": [
+            {
+              "entityIdentifierCode": "SH",
+              "name": "Port Terminal"
+            }
+          ],
+          "partyLocation": [
+            {
+              "addressInformation": "1 Port Rd"
+            }
+          ],
+          "geographicLocation": [
+            {
+              "cityName": "Port City",
+              "stateOrProvinceCode": "GA",
+              "postalCode": "31400",
+              "countryCode": "US"
+            }
+          ]
+        },
+        {
+          "partyIdentification": [
+            {
+              "entityIdentifierCode": "CN",
+              "name": "Example Warehouse"
+            }
+          ],
+          "partyLocation": [
+            {
+              "addressInformation": "100 Example Blvd"
+            }
+          ],
+          "geographicLocation": [
+            {
+              "cityName": "Warehouse City",
+              "stateOrProvinceCode": "GA",
+              "postalCode": "31300",
+              "countryCode": "US"
+            }
+          ]
+        }
+      ],
+      "LX_loop": [
+        {
+          "transactionSetLineNumber": [
+            {
+              "assignedNumber": "1"
+            }
+          ],
+          "AT7_loop": [
+            {
+              "shipmentStatusDetails": [
+                {
+                  "shipmentStatusIndicatorCode": "C2",
+                  "shipmentStatusOrAppointmentReasonCode": "NS",
+                  "date": "20260824",
+                  "time": "0600",
+                  "timeCode": "LT"
+                }
+              ],
+              "equipmentShipmentOrRealPropertyLocation": [
+                {
+                  "cityName": "Port City",
+                  "stateOrProvinceCode": "GA"
+                }
+              ],
+              "equipmentOrContainerOwnerAndType": [
+                {
+                  "standardCarrierAlphaCode": "TSTU",
+                  "equipmentNumber": "123456",
+                  "equipmentNumberCheckDigit": "0"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "transactionSetLineNumber": [
+            {
+              "assignedNumber": "2"
+            }
+          ],
+          "AT7_loop": [
+            {
+              "shipmentStatusDetails": [
+                {
+                  "shipmentStatusIndicatorCode": "AF",
+                  "shipmentStatusOrAppointmentReasonCode": "NS",
+                  "date": "20260825",
+                  "time": "1015",
+                  "timeCode": "LT"
+                }
+              ],
+              "equipmentShipmentOrRealPropertyLocation": [
+                {
+                  "cityName": "Port City",
+                  "stateOrProvinceCode": "GA"
+                }
+              ],
+              "equipmentOrContainerOwnerAndType": [
+                {
+                  "standardCarrierAlphaCode": "TSTU",
+                  "equipmentNumber": "765432",
+                  "equipmentNumberCheckDigit": "1"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "transactionSetTrailer": [
+        {
+          "numberOfIncludedSegments": "17",
+          "transactionSetControlNumber": "0001"
+        }
+      ]
+    }
+  ]
+}

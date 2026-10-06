@@ -1,2 +1,34 @@
-{ "links": [], "count": 1, "hasMore": false, "offset": 0, "totalResults": 1,
-  "items": [ { "links": [], "id": "4521", "shipmentstatus": "inTransit", "laststatusdt": "2026-08-20T09:00:00" } ] }
+{
+  "links": [],
+  "count": 3,
+  "hasMore": false,
+  "offset": 0,
+  "totalResults": 3,
+  "items": [
+    {
+      "links": [],
+      "id": "4521",
+      "shipmentnumber": "INBSHIP1001",
+      "bol": "OCEANBL0000001",
+      "containernumber": "TSTU1234560",
+      "shipmentstatus": "inTransit",
+      "laststatusdt": "2026-08-20T09:00:00"
+    },
+    {
+      "links": [],
+      "id": "4522",
+      "shipmentnumber": "INBSHIP1002",
+      "bol": "OCEANBL0000001",
+      "containernumber": "TSTU7654321",
+      "shipmentstatus": "toBeShipped"
+    },
+    {
+      "links": [],
+      "id": "4530",
+      "shipmentnumber": "INBSHIP1010",
+      "bol": "OCEANBL0000099",
+      "containernumber": null,
+      "shipmentstatus": "toBeShipped"
+    }
+  ]
+}
