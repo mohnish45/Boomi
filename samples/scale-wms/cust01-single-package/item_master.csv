@@ -1,0 +1,11 @@
+company,item,description,uom,length_in,width_in,height_in,weight_lb,packaging_class,fragile,ship_alone,carton_group
+CUST01,TNC-KT-2PK-NAV,Kitchen towel 2-pack navy stripe,EA,10.0,8.0,1.5,0.60,POLY_OK,N,N,CUST01-SINGLE
+CUST01,TNC-DC-4PK-WHT,Dish cloth 4-pack white waffle,EA,7.0,7.0,1.5,0.45,POLY_OK,N,N,CUST01-SINGLE
+CUST01,TNC-OM-01-GRY,Oven mitt quilted grey,EA,13.0,7.0,1.0,0.30,POLY_OK,N,N,CUST01-SINGLE
+CUST01,TNC-PH-2PK-RED,Pot holder 2-pack red,EA,8.0,8.0,1.0,0.25,POLY_OK,N,N,CUST01-SINGLE
+CUST01,TNC-PM-4PK-LIN,Placemat set of 4 linen,EA,19.0,13.0,1.0,1.10,POLY_OK,N,N,CUST01-SINGLE
+CUST01,TNC-TR-72-LIN,Table runner 72in linen (folded),EA,14.0,7.0,1.5,0.70,POLY_OK,N,N,CUST01-SINGLE
+CUST01,TNC-BM-2032-BLU,Bath mat 20x32 memory foam (rolled),EA,11.0,5.0,5.0,1.80,BOX_ONLY,N,N,CUST01-SINGLE
+CUST01,TNC-SC-7272-WHT,Shower curtain 72x72 fabric,EA,12.0,10.0,1.5,1.20,POLY_OK,N,N,CUST01-SINGLE
+CUST01,TNC-SD-CER-WHT,Soap dispenser ceramic white,EA,4.0,4.0,7.0,1.15,BOX_ONLY,Y,N,CUST01-SINGLE
+CUST01,TNC-RG-2436-NAT,Accent rug 24x36 jute (rolled),EA,25.0,6.0,6.0,4.80,BOX_ONLY,N,N,CUST01-SINGLE

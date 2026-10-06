@@ -40,6 +40,10 @@ plugins/
   bc-agentstudio/
 ```
 
+## Samples
+
+`samples/` holds sample data and configuration notes for systems that Boomi processes integrate with, e.g. [`samples/scale-wms/cust01-single-package`](samples/scale-wms/cust01-single-package) (Scale WMS single-package cartonization).
+
 ## Contributing
 
 Skills live under `plugins/<plugin-name>/skills/<skill-name>/SKILL.md`. Keep skill descriptions specific enough that Claude picks the right skill for the task, and keep guidance concrete (concepts, common pitfalls, and what to ask the user) rather than generic advice.

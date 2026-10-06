@@ -1,0 +1,8 @@
+company,carton_type,description,packaging_class,inside_length_in,inside_width_in,inside_height_in,max_fill_pct,max_weight_lb,tare_weight_lb,ship_length_in,ship_width_in,ship_height_in,unit_cost_usd,select_priority
+CUST01,PB-S,Poly mailer 10x13,POLY,12.0,9.0,2.5,90,3.0,0.05,13.0,10.0,2.5,0.12,10
+CUST01,PB-M,Poly mailer 14x19,POLY,18.0,13.0,4.0,90,8.0,0.10,19.0,14.0,4.0,0.21,20
+CUST01,PB-L,Poly mailer 19x24,POLY,23.0,18.0,6.0,90,15.0,0.15,24.0,19.0,6.0,0.34,30
+CUST01,BX-S,Corrugated box 12x9x6,BOX,11.75,8.75,5.75,85,20.0,0.50,12.0,9.0,6.0,0.55,40
+CUST01,BX-M,Corrugated box 16x12x8,BOX,15.75,11.75,7.75,85,35.0,0.90,16.0,12.0,8.0,0.85,50
+CUST01,BX-L,Corrugated box 20x16x12,BOX,19.75,15.75,11.75,85,50.0,1.50,20.0,16.0,12.0,1.35,60
+CUST01,BX-XL,Corrugated box 24x18x18,BOX,23.75,17.75,17.75,85,65.0,2.20,24.0,18.0,18.0,1.95,70

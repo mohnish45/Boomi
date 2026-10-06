@@ -1,0 +1,14 @@
+erp_order,shipment_id,line,item,qty,uom,scenario
+SO-100245,CUST01-100245,1,TNC-KT-2PK-NAV,2,EA,Soft goods only - expect poly bag
+SO-100245,CUST01-100245,2,TNC-DC-4PK-WHT,1,EA,Soft goods only - expect poly bag
+SO-100245,CUST01-100245,3,TNC-OM-01-GRY,1,EA,Soft goods only - expect poly bag
+SO-100245,CUST01-100245,4,TNC-PH-2PK-RED,1,EA,Soft goods only - expect poly bag
+SO-100245,CUST01-100245,5,TNC-TR-72-LIN,1,EA,Soft goods only - expect poly bag
+SO-100246,CUST01-100246,1,TNC-KT-2PK-NAV,1,EA,Mixed with ceramic + foam - expect box
+SO-100246,CUST01-100246,2,TNC-DC-4PK-WHT,2,EA,Mixed with ceramic + foam - expect box
+SO-100246,CUST01-100246,3,TNC-TR-72-LIN,1,EA,Mixed with ceramic + foam - expect box
+SO-100246,CUST01-100246,4,TNC-SC-7272-WHT,1,EA,Mixed with ceramic + foam - expect box
+SO-100246,CUST01-100246,5,TNC-SD-CER-WHT,1,EA,Mixed with ceramic + foam - expect box
+SO-100246,CUST01-100246,6,TNC-BM-2032-BLU,1,EA,Mixed with ceramic + foam - expect box
+SO-100247,CUST01-100247,1,TNC-RG-2436-NAT,1,EA,Item longer than largest box - expect exception
+SO-100247,CUST01-100247,2,TNC-KT-2PK-NAV,1,EA,Item longer than largest box - expect exception
