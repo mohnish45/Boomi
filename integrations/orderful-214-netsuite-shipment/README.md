@@ -38,7 +38,7 @@ Process `ORD_214_to_NS_InboundShipment`, scheduled every 5–15 minutes. Turn on
 | 3 | **Data Process – Split Documents** (JSON) | One document per transaction. Put the Orderful transaction id in DDP `orderfulTransactionId`. If the list only returns ids, add an HTTP GET per id to fetch the message body. |
 | 4 | **Flow Control** | *Run each document individually*. The scripts pass data in a Dynamic Process Property, so documents must run one at a time. |
 | 5 | **Try/Catch** | Wrap 6–11. Catch path → step 12. |
-| 6 | **Data Process – Custom Scripting** | [`scripts/Normalize214.groovy`](scripts/Normalize214.groovy). Picks the latest AT7 event, the container (MS2) and BOL (L11*BM), and outputs the SuiteQL lookup body. |
+| 6 | **Data Process – Custom Scripting** | [`scripts/Normalize214.groovy`](scripts/Normalize214.groovy). Picks the latest AT7 event, the container (L11*EQ or MS2) and the ocean BOL (L11*BM or B10-02), and outputs the SuiteQL lookup body. |
 | 7 | **HTTP Client – POST** NetSuite SuiteQL | `https://<ACCOUNT>.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql`, header `Prefer: transient`, content type `application/json`. |
 | 8 | **Data Process – Custom Scripting** | [`scripts/BuildNetSuitePatch.groovy`](scripts/BuildNetSuitePatch.groovy). Sets DDP `nsAction` and `nsRecordId` and outputs the PATCH body. |
 | 9 | **Route** on DDP `nsAction` | `PATCH` → 10 · `STALE` → 11 (nothing to update, ack it) · `NOT_FOUND` / `AMBIGUOUS` → Exception shape (goes to the catch path). |
@@ -63,15 +63,15 @@ The 214 doesn't need a Boomi Map component. `Normalize214.groovy` flattens the O
 
 | 214 source | NetSuite Inbound Shipment field (REST id) | Rule |
 | --- | --- | --- |
-| MS2-01 + MS2-02 (equipment initial + number) | *lookup:* `externalDocumentNumber` (configurable) | Match key: container number, uppercased, `[A-Z0-9-]` only. |
-| L11-01 where L11-02 = `BM` | *lookup fallback:* `billOfLading`, and written back | Second match key. |
+| L11-01 where L11-02 = `EQ`; otherwise MS2-01 + MS2-02 + MS2-03 (owner + number + check digit) | *lookup:* `externalDocumentNumber` (configurable) | Match key: container number, uppercased, `[A-Z0-9-]` only. |
+| L11-01 where L11-02 = `BM`/`MB`; otherwise B10-02 | *lookup fallback:* `billOfLading`, and written back | Second match key: the ocean bill of lading. |
 | AT7-01 ∈ AF, X6, CD, P1, AM, AV, I1, OA | `shipmentStatus` = `inTransit` | Only from `toBeShipped`. A shipment that's already partially received, received, or closed is never changed. |
 | AT7-01 = AF, AT7-05 | `actualShippingDate` | Departed pickup. |
 | AT7-01 ∈ AG, AB, AT7-05 | `expectedDeliveryDate` | Estimated delivery / delivery appointment. |
 | AT7-01 ∈ X1, D1, AT7-05 | `actualDeliveryDate` | Arrived / unloaded. Receiving stays a warehouse step in NetSuite: a 214 never sets `received`, because that is what creates item receipts. |
 | AT7-01 / AT7-02 | `custrecord_tnc_ib_edi_status` | For example `AF/NS`. |
 | AT7-05/06/07 → ISO-8601 | `custrecord_tnc_ib_edi_status_dt` | Free-Form Text. Also used to skip out-of-order (older) 214s. |
-| MS1-01/02/03 of the latest AT7 loop | `custrecord_tnc_ib_edi_location` | City, state, country. |
+| MS1-01/02/03 of the latest AT7 loop (not the N1 parties) | `custrecord_tnc_ib_edi_location` | City, state, country. |
 | Orderful transaction id | `custrecord_tnc_ib_orderful_txn` | Audit trail back to Orderful. |
 
 When several AT7 events arrive in one 214, only the **latest** event (by date/time) is applied.
@@ -81,8 +81,9 @@ When several AT7 events arrive in one 214, only the **latest** event (by date/ti
 1. **Which NetSuite record is the "container/shipment header".** The scripts target the native **Inbound Shipment** (`inboundshipment` / `inboundShipment`). If TNC uses a custom container record instead, change `NS_RECORD_TABLE` in `Normalize214.groovy` and the PATCH path to `services/rest/record/v1/customrecord_<id>/{1}`, then rename the fields in `BuildNetSuitePatch.groovy`.
 2. **Which field holds the container number** (`NS_CONTAINER_FIELD`, default `externaldocumentnumber`).
 3. **The custom field script ids** (`custrecord_tnc_ib_*` are placeholders). Create them, or point the constants at existing fields.
-4. **Orderful JSON element names.** Compare the `KEYS` map at the top of `Normalize214.groovy` with a real 214 from Orderful's JSON view. The parser searches the whole document by element name, so only the names need to match, not the nesting.
-5. **Which AT7 codes your carriers or forwarders actually send.** Adjust the code lists at the top of `BuildNetSuitePatch.groovy`.
+4. **Which AT7 codes your carriers actually send.** Adjust the code lists at the top of `BuildNetSuitePatch.groovy`. A real drayage 214 sent `C2`, which isn't mapped yet. Until it's mapped, a `C2` only updates the last-status custom fields.
+
+The Orderful element names are confirmed against a real Orderful 214: AT7-01 is `shipmentStatusIndicatorCode`, MS2 is `equipmentOrContainerOwnerAndType`, and MS1 is `equipmentShipmentOrRealPropertyLocation`.
 
 ## Testing locally
 

@@ -1,2 +1,2 @@
 { "links": [], "count": 1, "hasMore": false, "offset": 0, "totalResults": 1,
-  "items": [ { "links": [], "id": "4521", "shipmentstatus": "toBeShipped", "laststatusdt": "2026-10-01T09:00:00" } ] }
+  "items": [ { "links": [], "id": "4521", "shipmentstatus": "inTransit", "laststatusdt": "2026-08-20T09:00:00" } ] }

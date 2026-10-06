@@ -15,10 +15,10 @@
  * canonical record is passed downstream in a Dynamic Process Property, which is
  * execution-wide.
  *
- * Orderful element names: Orderful exposes X12 elements as camelCase names. The ones
- * this script looks for are listed in KEYS below. Confirm them against a real 214 from
- * your Orderful account (Transaction > JSON view) and adjust KEYS only — the rest of the
- * script searches the whole document tree, so segment/loop nesting doesn't matter.
+ * Orderful segment/element names below are taken from a real Orderful 214 (X12 004010,
+ * drayage carrier; anonymized copy in samples/orderful-214.json). The script finds segments by name
+ * anywhere in the tree, so it works with or without Orderful's envelope around the
+ * transaction and for one or many LX/AT7 loops.
  */
 import com.boomi.execution.ExecutionUtil
 import groovy.json.JsonOutput
@@ -33,22 +33,14 @@ final String NS_CONTAINER_FIELD   = 'externaldocumentnumber'
 final String NS_BOL_FIELD         = 'billoflading'
 final String NS_LAST_STATUS_FIELD = 'custrecord_tnc_ib_edi_status_dt' // placeholder: last applied 214 event time
 
-final Map KEYS = [
-    scac              : 'standardCarrierAlphaCode',      // B10-03
-    shipmentId        : 'shipmentIdentificationNumber',  // B10-02
-    refQualifier      : 'referenceIdentificationQualifier', // L11-02
-    refValue          : 'referenceIdentification',       // L11-01 / B10-01
-    statusCode        : 'shipmentStatusCode',            // AT7-01
-    statusReason      : 'shipmentStatusOrAppointmentReasonCode', // AT7-02
-    date              : 'date',                          // AT7-05 (CCYYMMDD)
-    time              : 'time',                          // AT7-06 (HHMM[SS])
-    timeCode          : 'timeCode',                      // AT7-07 (LT, ET, CT, MT, PT, UT, ...)
-    equipmentInitial  : 'equipmentInitial',              // MS2-01
-    equipmentNumber   : 'equipmentNumber',               // MS2-02
-    city              : 'cityName',                      // MS1-01
-    state             : 'stateOrProvinceCode',           // MS1-02
-    country           : 'countryCode',                   // MS1-03
-]
+// Orderful segment names (X12 segment in comments).
+final String SEG_B10 = 'beginningSegmentForTransportationCarrierShipmentStatusMessage'
+final String SEG_L11 = 'businessInstructionsAndReferenceNumber'
+final String SEG_AT7 = 'shipmentStatusDetails'
+final String SEG_MS1 = 'equipmentShipmentOrRealPropertyLocation'
+final String SEG_MS2 = 'equipmentOrContainerOwnerAndType'
+// AT7-01 shipment status, or AT7-03 appointment status when AT7-01 is empty.
+final List AT7_STATUS_ELEMENTS = ['shipmentStatusIndicatorCode', 'shipmentAppointmentStatusCode']
 
 // ---- Helpers -------------------------------------------------------------------------
 
@@ -63,9 +55,13 @@ walk = { node, Closure visitor ->
     }
 }
 
-def firstValue = { root, String key ->
-    def found = null
-    walk(root) { Map m -> if (found == null && m[key] instanceof String && m[key]) found = m[key] }
+/** Every occurrence of a segment, anywhere in the tree, as [segment: Map, loop: Map] pairs. */
+def segments = { root, String name ->
+    List found = []
+    walk(root) { Map m ->
+        def v = m[name]
+        (v instanceof List ? v : (v instanceof Map ? [v] : [])).each { if (it instanceof Map) found << [segment: it, loop: m] }
+    }
     found
 }
 
@@ -94,51 +90,46 @@ for (int i = 0; i < dataContext.getDataCount(); i++) {
     Properties props = dataContext.getProperties(i)
     def doc = new JsonSlurper().parseText(new String(is.getBytes(), 'UTF-8'))
 
-    // L11 references, keyed by qualifier (BM = bill of lading, CN = PRO, PO, ...)
+    Map b10 = segments(doc, SEG_B10).find()?.segment ?: [:]
+
+    // L11 references, keyed by qualifier (EQ = equipment/container, BM = bill of lading,
+    // CN = PRO, PO = purchase order, ...)
     Map refs = [:]
-    walk(doc) { Map m ->
-        if (m[KEYS.refQualifier] && m[KEYS.refValue] && !refs.containsKey(m[KEYS.refQualifier])) {
-            refs[m[KEYS.refQualifier]] = m[KEYS.refValue]
-        }
+    segments(doc, SEG_L11).each { s ->
+        def q = s.segment.referenceIdentificationQualifier
+        if (q && s.segment.referenceIdentification && !refs.containsKey(q)) refs[q] = s.segment.referenceIdentification
     }
 
-    // Every AT7 status in the transaction; keep the latest by event time. The event's
-    // location (MS1) lives in the same AT7 loop, i.e. the map that holds the AT7 segment.
-    def isStatus = { it instanceof Map && it[KEYS.statusCode] }
-    def locationIn = { scope ->
-        [firstValue(scope, KEYS.city), firstValue(scope, KEYS.state), firstValue(scope, KEYS.country)]
-            .findAll { it }.join(', ') ?: null
-    }
-    List events = []
-    Set seen = Collections.newSetFromMap(new IdentityHashMap())
-    def addEvent = { Map m, scope ->
-        if (!seen.add(m)) return
-        events << [code    : m[KEYS.statusCode],
-                   reason  : m[KEYS.statusReason],
-                   at      : toIso(m[KEYS.date], m[KEYS.time], m[KEYS.timeCode]),
-                   location: scope == null ? null : locationIn(scope)]
-    }
-    walk(doc) { Map m ->
-        m.values().each { v ->
-            if (isStatus(v)) addEvent(v, m)
-            else if (v instanceof List) v.findAll(isStatus).each { addEvent(it, m) }
-        }
-    }
-    if (isStatus(doc)) addEvent(doc, null)
+    // Every AT7 in the transaction; keep the latest by event time. The event's location
+    // (MS1) and container (MS2) sit beside it in the same AT7 loop.
+    List events = segments(doc, SEG_AT7).collect { s ->
+        Map at7 = s.segment
+        Map ms1 = segments(s.loop, SEG_MS1).find()?.segment
+        Map ms2 = segments(s.loop, SEG_MS2).find()?.segment
+        [code     : AT7_STATUS_ELEMENTS.collect { at7[it] }.find { it },
+         reason   : at7.shipmentStatusOrAppointmentReasonCode,
+         at       : toIso(at7.date, at7.time, at7.timeCode),
+         location : ms1 ? [ms1.cityName, ms1.stateOrProvinceCode, ms1.countryCode].findAll { it }.join(', ') : null,
+         // MS2-01 owner prefix + MS2-02 number + MS2-03 check digit, e.g. TSTU + 123456 + 0
+         container: ms2?.equipmentNumber ? (ms2.equipmentNumber.startsWith(ms2.standardCarrierAlphaCode ?: '~')
+                        ? ms2.equipmentNumber
+                        : (ms2.standardCarrierAlphaCode ?: '') + ms2.equipmentNumber) + (ms2.equipmentNumberCheckDigit ?: '')
+                    : null]
+    }.findAll { it.code }
     def latest = events.findAll { it.at }.max { it.at } ?: (events ? events[-1] : null)
 
-    String equipInit = firstValue(doc, KEYS.equipmentInitial)
-    String equipNum  = firstValue(doc, KEYS.equipmentNumber)
-    // Containers are usually sent as MS2-01 prefix (e.g. MSCU) + MS2-02 digits; some
-    // partners put the full number in MS2-02.
-    String container = equipNum && equipInit && !equipNum.startsWith(equipInit) ? equipInit + equipNum : equipNum
+    // L11*EQ carries the full container number; MS2 is the fallback.
+    String container = refs['EQ'] ?: latest?.container ?: events.find { it.container }?.container
 
     Map canonical = [
         orderfulTransactionId: props.getProperty('document.dynamic.userdefined.orderfulTransactionId') ?: doc?.id?.toString(),
-        scac                 : firstValue(doc, KEYS.scac),
-        shipmentId           : firstValue(doc, KEYS.shipmentId),
+        scac                 : b10.standardCarrierAlphaCode,
+        carrierReference     : b10.referenceIdentification,         // B10-01, carrier's load reference
+        shipmentId           : b10.shipmentIdentificationNumber,    // B10-02
         containerNumber      : sqlSafe(container),
-        billOfLading         : sqlSafe(refs['BM'] ?: refs['MB']),
+        // Ocean BOL: L11*BM/MB when sent, otherwise B10-02 (the drayage carrier sends the
+        // ocean bill of lading there, e.g. a ZIM/Maersk BOL).
+        billOfLading         : sqlSafe(refs['BM'] ?: refs['MB'] ?: b10.shipmentIdentificationNumber),
         proNumber            : refs['CN'],
         poNumber             : refs['PO'],
         statusCode           : latest?.code,
@@ -151,7 +142,7 @@ for (int i = 0; i < dataContext.getDataCount(); i++) {
     if (!canonical.statusCode || !(canonical.containerNumber || canonical.billOfLading)) {
         // Can't match or apply anything; fail the document so it is visible in Process
         // Reporting and the Orderful delivery is not acknowledged.
-        throw new IllegalStateException("214 missing status (AT7) or container/BOL (MS2/L11*BM): " +
+        throw new IllegalStateException("214 missing status (AT7) or container/BOL (L11*EQ, MS2, L11*BM, B10-02): " +
                 JsonOutput.toJson(canonical))
     }
 
